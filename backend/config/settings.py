@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     "corsheaders",
     "drf_spectacular",
     "apps.accounts",
+    "apps.patients",
+    "apps.doctors",
+    "apps.appointments",
 ]
 
 MIDDLEWARE = [
@@ -163,3 +166,9 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
 CSRF_COOKIE_HTTPONLY = False  # React must read this cookie
+
+
+
+
+TIME_ZONE = "Asia/Kolkata"          # was "UTC"
+APPOINTMENT_MAX_DAYS_AHEAD = 60     # patients can book up to 60 days ahead

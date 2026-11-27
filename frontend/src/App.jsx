@@ -1,24 +1,34 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { Navigate, Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./auth/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 export default function App() {
-  const [status, setStatus] = useState("Checking the API...");
-
-  useEffect(() => {
-    axios
-      .get("/api/auth/csrf/")
-      .then(() => setStatus("Connected to the Django API"))
-      .catch(() => setStatus("Cannot reach the API. Is Django running?"));
-  }, []);
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100">
-      <div className="bg-white p-8 rounded-xl shadow text-center">
-        <h1 className="text-2xl font-bold text-blue-700">
-          Hospital Management System
-        </h1>
-        <p className="mt-3 text-slate-600">{status}</p>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route element={<ProtectedRoute role="PATIENT" />}>
+        <Route
+          path="/patient"
+          element={<Dashboard title="Patient Dashboard" />}
+        />
+      </Route>
+
+      <Route element={<ProtectedRoute role="DOCTOR" />}>
+        <Route
+          path="/doctor"
+          element={<Dashboard title="Doctor Dashboard" />}
+        />
+      </Route>
+
+      <Route element={<ProtectedRoute role="ADMIN" />}>
+        <Route path="/admin" element={<Dashboard title="Admin Dashboard" />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   );
 }
